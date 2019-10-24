@@ -268,7 +268,7 @@ const power = (base, exp) => {
 console.log(power(8, 2));
 //6
 const fibonacci = n => n <= 1 ? 1 : fibonacci(n - 1) + fibonacci(n - 2)
-console.log(fibonacci(5));
+console.log(fibonacci(3));
 //7
 const isEvenRecursive = n => {
   if (n === 0) return true
@@ -277,13 +277,11 @@ const isEvenRecursive = n => {
 }
 console.log(isEvenRecursive(2));
 //8
-var final = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+var final = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 const binarySearch = (num, arr) => {
   let newArr = arr
   //middle is an index not a value
   let middle = Math.floor(newArr.length / 2)
-  console.log(newArr);
-  console.log(arr);
   if (num === newArr[middle]) {
     console.log('answer');
     return final.indexOf(newArr[middle])
@@ -352,8 +350,11 @@ console.log(addTen([1, 2, 3]));
 //3
 const h = require('hyperscript')
 const buzzwords = require('buzzwords')
-const li = (w) => h('li', w)
-console.log(h('ul', li(buzzwords)))
+const li = (w) => {
+  let words = w.map(x => h('li', x))
+  return words
+}
+console.log(h('ul', li(buzzwords)).outerHTML)
 //4
 const convert = require('color-convert')
 const cssColorList = require('css-color-list')
@@ -687,6 +688,34 @@ const myReplace = (str, x, y) => {
   return arr.join('')
 }
 console.log(myReplace('hello', 'l', '1'));
+//range 
+const myRange = (arr, start, end) => arr.slice(start, end + 1)
+//omit
+const myOmit = (arr, start, end) => {
+  let left = arr.slice(0, start)
+  let right = arr.slice(end)
+  return left.concat(right)
+}
+console.log(myOmit([1,2,3,4], 2, 3));
+//where
+const myWhere = (arr, func1, func2) => {
+  let newArr = arr 
+  return newArr.map(x => {
+    if(func1(x)) return func2(x)
+    else return x
+  })
+} 
+console.log(myWhere([1,2,3,4,5], (x) => x > 2, (x) => x * 10));
+//T
+const myT = func => func
+//F
+const myF = func => func
+//comparator
+const myComparator = (x, y) => {
+  if(x < y) return x - y
+  else if(x > y) return y - x
+  else return 0
+}
 
 
 
@@ -697,7 +726,13 @@ function sayHello() {
 setTimeout(sayHello(), 1000)
 console.log('me first');
 
-
+//promises 
+function display(data){
+  console.log(data);
+}
+let futureData = fetch('')
+futureData.then(display)
+console.log('me first');
 
 
 
