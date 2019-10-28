@@ -456,10 +456,17 @@ const obj1 = { 'name': 'joe' }
 const myProp = (x, y) => y[x]
 console.log(myProp('name', obj1));
 //path
-const myPath = (arr, obj) => {
-  for (i = 0; i < arr.length; i++) {
-    if (arr[i] !== null) return obj[arr[i]]
+const myPath = (paths, obj) => {
+  var val = obj;
+  var idx = 0;
+  while (idx < paths.length) {
+    if (val == null) {
+      return;
+    }
+    val = val[paths[idx]];
+    idx += 1;
   }
+  return val;
 }
 console.log(myPath(['name'], obj1));
 //inc
@@ -467,9 +474,13 @@ const myInc = num => myAdd(num, 1)
 //dec
 const myDec = num => mySub(num, 1)
 //identity
+const obj = {}
 const myIdentity = val => val
+console.log(myIdentity(obj) === obj);
 //always
 const myAlways = val => () => val
+const t = myAlways('tee')
+console.log(t());
 //gt
 const myGt = (arr, i) => {
   let newArr = []
@@ -530,7 +541,6 @@ const mySplit = (str, el) => {
   return strArr
 }
 console.log(mySplit('aabcdef', 'b'));
-
 //join
 const myJoin = (arr, seperator) => {
   let newArr = []
@@ -543,7 +553,7 @@ const myJoin = (arr, seperator) => {
 }
 console.log(myJoin([1, 2, 3], '+'));
 //head
-const myHead = arr => arr[0]
+const myHead = (arg) => typeof arg === 'string' ? arg.charAt(0) : arg[0]
 //tail
 const myTail = arr => arr.slice(1)
 console.log(myTail([1, 2, 3]));
@@ -585,12 +595,45 @@ myMemoize(addNow, 1, 2)
 myMemoize(addNow, 2, 2)
 console.log(obj);
 //not 
-const myNot = (arr, not) => arr.filter(x => !x.toString().includes(not))
-console.log(myNot([1, 2, 3], 2));
+const myNot = (el) => !el
+console.log(myNot(true));
 // pathOr
+const myPathOr = (na, arr, obj) => {
+  if(arr.join('').includes(Object.keys(obj))){
+    let vals = Object.values(obj)
+    return obj[arr[0]][arr[1]]
+  } else return na
+}
+console.log(myPathOr('N/A', ['a', 'b'], {c: {b: 2}}));
 //propOr
+const obj = {name: 'Colby', age: 25}
+const myPropOr = (def, prop) => Object.keys(obj).indexOf(prop) > -1 ? obj[prop] : def 
+console.log(myPropOr('Default', 'name'));
 //pathEq
+const user1 = {name: 'user1', address: { zipCode: 90210 } };
+const user2 = {name: 'user2', address: { zipCode: 29403 } };
+const users = [user1, user2]
+const myPath = (paths, obj) => {
+  var val = obj;
+  var idx = 0;
+  while (idx < paths.length) {
+    if (val == null) {
+      return;
+    }
+    val = val[paths[idx]];
+    idx += 1;
+  }
+  return val;
+}
+const myPathEq = (path, val, obj) => myPath(path, obj) === val
+console.log(users.forEach(x => {
+  if(myPathEq(['address', 'zipCode'], 29403, x)){
+    console.log(x.name);
+  }
+}))
 //propEq
+let obj = {hair: 'brown'}
+const myPropEq = (key, val, obj) => obj[key] === val
 //pick
 const obj = { 'a': 5, 'b': 6, 'c': 7 };
 const myPick = (...x) => {
@@ -707,9 +750,9 @@ const myWhere = (arr, func1, func2) => {
 } 
 console.log(myWhere([1,2,3,4,5], (x) => x > 2, (x) => x * 10));
 //T
-const myT = func => func
+const myT = (...args) => true
 //F
-const myF = func => func
+const myF = (...args) => false
 //comparator
 const myComparator = (x, y) => {
   if(x < y) return x - y
