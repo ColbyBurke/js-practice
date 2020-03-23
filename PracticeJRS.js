@@ -778,9 +778,66 @@ futureData.then(display)
 console.log('me first');
 
 
+function map (fn, data) {
+  let result = []
+  for(i = 0; i < data.length; i++){
+    let value = data[i]
+    let functionResult = fn(value)
+    result.push(functionResult)
+  }
+  return result
+}
+
+function addOne(a) {
+  return a + 1
+}
+
+console.log(map(addOne, [1,2,3,4]))
+
+const myFilter2 = (arr, func) => {
+  let newArr = []
+  for(i = 0; i < arr.length; i++){
+    if(func(arr[i])) newArr.push(arr[i])
+  }
+  return newArr
+}
+console.log(myFilter2([1,2,3,4], (x) => x > 2));
 
 
+//Testing 
+function expect(actual) {
+  return {
+    toBe: function(expected) {
+      if (actual !== expected) {
+        throw new Error(`${actual} is not equal to ${expected}`);
+      }
+    }
+  };
+}
 
+const sum = (x,y) => x + y
+
+function subtract(x,y){
+	if(typeof x !== 'number' || typeof y !== 'number'){
+		return "you are an idiot"
+    }
+	return x-y
+}
+
+function test(title, fn){
+  try{
+    fn()
+    console.log(`YES TEST PASSED ${title}`);
+  }catch(err){
+    console.error(`X TEST FAILED ${title}`)
+    console.error(err);
+    
+  }
+}
+
+test('sum adds numbers', () => {
+  expect(sum(1,3)).toBe(4)
+})
 
 
 
